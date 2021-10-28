@@ -9,7 +9,7 @@ const config = {
   port: 27017,
   user: 'jmontesanos',
   password: 'NuuEJL9bTtEZow',
-  database: 'storemongodb',
+  database: 'admin',
   useNewUrlParser: true
 };
 
