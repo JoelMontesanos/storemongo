@@ -5,10 +5,10 @@ const config = {
   name: 'mongo',
   connector: 'mongodb',
   url: '',
-  host: 'localhost',
+  host: '147.182.187.121',
   port: 27017,
-  user: '',
-  password: '',
+  user: 'jmontesanos',
+  password: 'NuuEJL9bTtEZow',
   database: 'storemongodb',
   useNewUrlParser: true
 };
