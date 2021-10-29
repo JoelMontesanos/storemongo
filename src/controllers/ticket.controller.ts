@@ -13,12 +13,65 @@ import {
 } from '@loopback/rest';
 import {Ticket} from '../models';
 import {TicketRepository} from '../repositories';
-
 export class TicketController {
   constructor(
     @repository(TicketRepository)
     public ticketRepository: TicketRepository,
   ) { }
+
+
+  @get('/tickets/descuentos/{monto}&{metodo_pago}&{cupon}&{zona}&{envio}')
+  async Descuentos(
+    @param.path.number('monto') montoTotal: number,
+    @param.path.string('metodo_pago') metodo_pago: string,
+    @param.path.string('cupon') cupon: string,
+    @param.path.number('zona') zona: number,
+    @param.path.number('envio') envio: number,
+  ): Promise<any> {
+    var metodo_pago = metodo_pago;
+    var cupon = cupon;
+    var zona = zona;
+    var montoFinal = 0;
+    var montoTotal = montoTotal;
+    var envio = envio;
+
+    switch (cupon) {
+      case 'MASTER20':
+        if (zona == 1 || zona == 2) {
+          if (metodo_pago == 'paypal') {
+            montoFinal = (montoTotal - ((montoTotal + envio) * .15));
+          }
+          if (metodo_pago == 'mastercard') {montoFinal = (montoTotal - ((montoTotal + envio) * .20));}
+        };
+        return montoFinal;
+
+      case 'PERRITOFELI':
+        if (zona == 1 || zona == 2 || zona == 3) {
+          if (metodo_pago == 'visa' || metodo_pago == 'mastercard') {montoFinal = montoTotal + (envio - (envio * .15));}
+        };
+        return montoFinal;
+
+      case 'NOJADO':
+        if (zona == 4 || zona == 5) {
+          montoFinal = montoTotal + (envio - (envio * .10));
+        };
+        return montoFinal;
+
+      case 'default':
+        if (zona == 5) {
+          if (metodo_pago == 'mastercard') {montoFinal = (montoTotal - ((montoTotal + envio) * .10));}
+        }
+        if (zona == 4) {
+          if (metodo_pago == 'mastercard' && montoTotal >= 3000) {montoFinal = montoTotal}
+        }
+        if (zona == 3) {
+          if (metodo_pago == 'visa' && montoTotal >= 4000) {montoFinal = (montoTotal - ((montoTotal + envio) * .15));}
+        }
+        return montoFinal;
+    }
+  }
+
+
 
   @post('/tickets')
   @response(200, {
@@ -69,6 +122,10 @@ export class TicketController {
   ): Promise<Ticket[]> {
     return this.ticketRepository.find(filter);
   }
+
+
+
+
 
   @patch('/tickets')
   @response(200, {
