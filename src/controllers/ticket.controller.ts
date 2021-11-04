@@ -20,7 +20,7 @@ export class TicketController {
   ) { }
 
 
-  @get('/tickets/descuentos/{monto}&{metodo_pago}&{cupon}&{zona}&{envio}')
+  @get('/tickets/descuentos/{montoTotal}&{metodo_pago}&{cupon}&{zona}&{envio}')
   async Descuentos(
     @param.path.number('monto') montoTotal: number,
     @param.path.string('metodo_pago') metodo_pago: string,
