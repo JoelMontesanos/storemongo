@@ -77,6 +77,9 @@ export class TicketController {
           if (metodo_pago == 'mastercard' && montoTotal >= 3000) {
             montoFinal = montoTotal;
             descuento = envio;
+          } else {
+            montoFinal = montoTotal + envio;
+            descuento = 0;
           }
         }
         if (zona == 3) {
