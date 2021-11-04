@@ -34,40 +34,58 @@ export class TicketController {
     var montoFinal = 0;
     var montoTotal = montoTotal;
     var envio = envio;
+    var descuento = 0;
 
     switch (cupon) {
       case 'MASTER20':
         if (zona == 1 || zona == 2) {
           if (metodo_pago == 'paypal') {
             montoFinal = (montoTotal - ((montoTotal + envio) * .15));
+            descuento = ((montoTotal + envio) * .15);
           }
-          if (metodo_pago == 'mastercard') {montoFinal = (montoTotal - ((montoTotal + envio) * .20));}
+          if (metodo_pago == 'mastercard') {
+            montoFinal = (montoTotal - ((montoTotal + envio) * .20));
+            descuento = ((montoTotal + envio) * .20);
+          }
         };
-        return montoFinal;
+        return {montoFinal: montoFinal, descuento: descuento};
 
       case 'PERRITOFELI':
         if (zona == 1 || zona == 2 || zona == 3) {
-          if (metodo_pago == 'visa' || metodo_pago == 'mastercard') {montoFinal = montoTotal + (envio - (envio * .15));}
+          if (metodo_pago == 'visa' || metodo_pago == 'mastercard') {
+            montoFinal = montoTotal + (envio - (envio * .15));
+            descuento = (envio - (envio * .15));
+          }
         };
-        return montoFinal;
+        return {montoFinal: montoFinal, descuento: descuento};
 
       case 'NOJADO':
         if (zona == 4 || zona == 5) {
           montoFinal = montoTotal + (envio - (envio * .10));
+          descuento = (envio - (envio * .10));
         };
-        return montoFinal;
+        return {montoFinal: montoFinal, descuento: descuento};
 
       case 'default':
         if (zona == 5) {
-          if (metodo_pago == 'mastercard') {montoFinal = (montoTotal - ((montoTotal + envio) * .10));}
+          if (metodo_pago == 'mastercard') {
+            montoFinal = (montoTotal - ((montoTotal + envio) * .10));
+            descuento = ((montoTotal + envio) * .10);
+          }
         }
         if (zona == 4) {
-          if (metodo_pago == 'mastercard' && montoTotal >= 3000) {montoFinal = montoTotal}
+          if (metodo_pago == 'mastercard' && montoTotal >= 3000) {
+            montoFinal = montoTotal;
+            descuento = envio;
+          }
         }
         if (zona == 3) {
-          if (metodo_pago == 'visa' && montoTotal >= 4000) {montoFinal = (montoTotal - ((montoTotal + envio) * .15));}
+          if (metodo_pago == 'visa' && montoTotal >= 4000) {
+            montoFinal = (montoTotal - ((montoTotal + envio) * .15));
+            descuento = ((montoTotal + envio) * .15);
+          }
         }
-        return montoFinal;
+        return {montoFinal: montoFinal, descuento: descuento};
     }
   }
 
